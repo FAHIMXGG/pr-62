@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { createContext } from "react";
 import App from "../../App";
@@ -21,6 +21,19 @@ const AuthProvider = ({children}) => {
     const signIn = (email, password) =>{
         return signInWithEmailAndPassword(auth, email, password);
     }
+
+    // user data after login
+    useEffect(() =>{
+        const unsubscribe = onAuthStateChanged(auth, currentUser =>{
+            console.log('auth state change', currentUser)
+            setUser(currentUser)
+            
+        })
+
+        return () =>{
+            unsubscribe()
+        }
+    }, [])
 
     const authInfo ={
         user, 
